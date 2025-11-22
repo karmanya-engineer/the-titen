@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Owner Registration - EV Smart Route & Charging Assistant</title>
+    <link rel="stylesheet" href="owner-registration.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="registration-container">
+        <div class="registration-card">
+            <div class="registration-header">
+                <h1>⚡ Register as Station Owner</h1>
+                <p>Complete the verification process to register your charging station</p>
+            </div>
+
+            <!-- Step 1: Owner Information -->
+            <div id="step1" class="registration-step">
+                <form id="ownerForm" class="owner-form">
+                    <h3>Owner Information</h3>
+                    
+                    <div class="form-group">
+                        <label for="ownerName">Full Name</label>
+                        <input type="text" id="ownerName" name="ownerName" placeholder="John Doe" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="ownerEmail">Email Address</label>
+                        <input type="email" id="ownerEmail" name="ownerEmail" placeholder="owner@example.com" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="ownerPhone">Phone Number</label>
+                        <input type="tel" id="ownerPhone" name="ownerPhone" placeholder="+1 (555) 123-4567" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="businessName">Business/Station Name</label>
+                        <input type="text" id="businessName" name="businessName" placeholder="My Charging Station" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="businessAddress">Business Address</label>
+                        <input type="text" id="businessAddress" name="businessAddress" placeholder="123 Main St, City, State ZIP" required>
+                    </div>
+
+                    <button type="button" class="btn-primary" id="nextToStep2">Next: Upload Documents</button>
+                </form>
+            </div>
+
+            <!-- Step 2: Document Upload -->
+            <div id="step2" class="registration-step" style="display: none;">
+                <form id="documentForm" class="document-form">
+                    <h3>Document Verification</h3>
+                    <p class="form-hint">Please upload the following documents for verification:</p>
+
+                    <div class="form-group">
+                        <label for="businessLicense">Business License / Registration</label>
+                        <div class="file-upload">
+                            <input type="file" id="businessLicense" name="businessLicense" accept=".pdf,.jpg,.jpeg,.png" required>
+                            <label for="businessLicense" class="file-label">
+                                <span class="file-icon">📄</span>
+                                <span class="file-text">Choose file or drag here</span>
+                            </label>
+                            <span class="file-name" id="licenseFileName"></span>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="proofOfOwnership">Proof of Ownership / Lease Agreement</label>
+                        <div class="file-upload">
+                            <input type="file" id="proofOfOwnership" name="proofOfOwnership" accept=".pdf,.jpg,.jpeg,.png" required>
+                            <label for="proofOfOwnership" class="file-label">
+                                <span class="file-icon">📋</span>
+                                <span class="file-text">Choose file or drag here</span>
+                            </label>
+                            <span class="file-name" id="ownershipFileName"></span>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="idDocument">Government ID (Driver's License / Passport)</label>
+                        <div class="file-upload">
+                            <input type="file" id="idDocument" name="idDocument" accept=".pdf,.jpg,.jpeg,.png" required>
+                            <label for="idDocument" class="file-label">
+                                <span class="file-icon">🆔</span>
+                                <span class="file-text">Choose file or drag here</span>
+                            </label>
+                            <span class="file-name" id="idFileName"></span>
+                        </div>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="button" class="btn-secondary" id="backToStep1">Back</button>
+                        <button type="button" class="btn-primary" id="nextToStep3">Next: Station Details</button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Step 3: Station Details -->
+            <div id="step3" class="registration-step" style="display: none;">
+                <form id="stationForm" class="station-form">
+                    <h3>Charging Station Details</h3>
+
+                    <div class="form-group">
+                        <label for="stationName">Station Name</label>
+                        <input type="text" id="stationName" name="stationName" placeholder="My EV Charging Station" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="stationAddress">Station Address</label>
+                        <input type="text" id="stationAddress" name="stationAddress" placeholder="123 Main St, City, State ZIP" required>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="chargerType">Charger Type</label>
+                            <select id="chargerType" name="chargerType" required>
+                                <option value="">Select type</option>
+                                <option value="Level 1">Level 1 (120V)</option>
+                                <option value="Level 2">Level 2 (240V)</option>
+                                <option value="DC Fast">DC Fast Charging</option>
+                                <option value="Tesla Supercharger">Tesla Supercharger</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="connectorType">Connector Type</label>
+                            <select id="connectorType" name="connectorType" required>
+                                <option value="">Select connector</option>
+                                <option value="CCS">CCS</option>
+                                <option value="CHAdeMO">CHAdeMO</option>
+                                <option value="Type 2">Type 2</option>
+                                <option value="Tesla">Tesla</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="powerKw">Power Rating (kW)</label>
+                            <input type="number" id="powerKw" name="powerKw" placeholder="e.g., 50" min="3" max="350" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="numChargers">Number of Chargers</label>
+                            <input type="number" id="numChargers" name="numChargers" placeholder="e.g., 4" min="1" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="availability">Availability</label>
+                        <select id="availability" name="availability" required>
+                            <option value="24/7">24/7</option>
+                            <option value="Business Hours">Business Hours</option>
+                            <option value="Limited">Limited Hours</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="costPerKwh">Cost per kWh ($)</label>
+                        <input type="number" id="costPerKwh" name="costPerKwh" placeholder="e.g., 0.35" step="0.01" min="0" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="amenities">Amenities (comma-separated)</label>
+                        <input type="text" id="amenities" name="amenities" placeholder="e.g., Restroom, Coffee, WiFi, Food Court">
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="button" class="btn-secondary" id="backToStep2">Back</button>
+                        <button type="submit" class="btn-primary" id="submitRegistration">
+                            <span class="btn-text">Submit for Review</span>
+                            <span class="btn-loader" style="display: none;">⏳</span>
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Success Message -->
+            <div id="successMessage" class="success-message" style="display: none;">
+                <div class="success-icon">✓</div>
+                <h2>Registration Submitted!</h2>
+                <p>Your registration has been submitted for admin review. You will receive an email notification once your application is approved.</p>
+                <a href="dashboard.html" class="btn-primary">Back to Dashboard</a>
+            </div>
+        </div>
+    </div>
+
+    <script src="auth.js"></script>
+    <script src="utils.js"></script>
+    <script src="owner-registration.js"></script>
+</body>
+</html>
+
+

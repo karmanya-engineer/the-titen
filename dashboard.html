@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - EV Smart Route & Charging Assistant</title>
+    <link rel="stylesheet" href="dashboard.css">
+    <link rel="stylesheet" href="responsive.css">
+    <link rel="stylesheet" href="animations.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="config.js"></script>
+    <script src="enhanced-maps.js"></script>
+    <script>
+        // Expose EnhancedGoogleMaps globally
+        if (typeof EnhancedGoogleMaps !== 'undefined') {
+            window.EnhancedGoogleMaps = EnhancedGoogleMaps;
+        }
+    </script>
+    <script>
+        // Load Google Maps API with key from config
+        if (CONFIG.GOOGLE_MAPS_API_KEY && CONFIG.GOOGLE_MAPS_API_KEY !== 'YOUR_GOOGLE_MAPS_API_KEY_HERE') {
+            const script = document.createElement('script');
+            script.src = `https://maps.googleapis.com/maps/api/js?key=${CONFIG.GOOGLE_MAPS_API_KEY}&libraries=places,directions,geometry&callback=initGoogleMaps`;
+            script.async = true;
+            script.defer = true;
+            document.head.appendChild(script);
+            
+            // Global callback for Google Maps
+            window.initGoogleMaps = function() {
+                console.log('✅ Google Maps API loaded successfully');
+                if (window.onGoogleMapsLoaded) {
+                    window.onGoogleMapsLoaded();
+                }
+            };
+        } else {
+            console.warn('⚠️ Google Maps API key not configured. Map features will be limited.');
+            window.initGoogleMaps = function() {
+                console.warn('Google Maps not available');
+            };
+        }
+    </script>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <h1>⚡ EV Smart Route</h1>
+            </div>
+            <div class="nav-menu">
+                <a href="dashboard.html" class="nav-link active">Dashboard</a>
+                <a href="profile.html" class="nav-link">Profile</a>
+                <button class="theme-toggle" id="themeToggle">🌙</button>
+                <div class="user-menu">
+                    <button class="user-btn" id="userMenuBtn">
+                        <span id="userName">User</span>
+                        <span class="user-arrow">▼</span>
+                    </button>
+                    <div class="user-dropdown" id="userDropdown">
+                        <a href="profile.html">Profile Settings</a>
+                        <a href="#" id="logoutBtn">Logout</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main class="main-content">
+        <div class="dashboard-container">
+            <!-- Route Planning Section -->
+            <section class="route-section">
+                <h2>Plan Your EV Route</h2>
+                <div class="route-inputs">
+                    <div class="input-group">
+                        <label for="origin">Starting Point</label>
+                        <input type="text" id="origin" placeholder="Enter starting location" autocomplete="off">
+                    </div>
+                    <div class="input-group">
+                        <label for="destination">Destination</label>
+                        <input type="text" id="destination" placeholder="Enter destination" autocomplete="off">
+                    </div>
+                    <div class="input-group">
+                        <label for="ev-range">EV Range (miles)</label>
+                        <input type="number" id="ev-range" placeholder="e.g., 250" value="250" min="50" max="500">
+                    </div>
+                    <div class="input-group">
+                        <label for="battery-percent">Current Battery (%)</label>
+                        <input type="number" id="battery-percent" placeholder="e.g., 80" value="80" min="0" max="100">
+                    </div>
+                    <button id="plan-route" class="btn-primary">Plan Route</button>
+                </div>
+            </section>
+
+            <!-- Map and Results Section -->
+            <div class="results-container">
+                <div class="map-section">
+                    <div id="map" class="map"></div>
+                </div>
+
+                <div class="results-section" id="results-section" style="display: none;">
+                    <div class="route-info">
+                        <h3>Route Information</h3>
+                        <div class="route-details">
+                            <div class="detail-item">
+                                <span class="label">Total Distance:</span>
+                                <span class="value" id="total-distance">-</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="label">Estimated Time:</span>
+                                <span class="value" id="estimated-time">-</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="label">Charging Stops:</span>
+                                <span class="value" id="charging-stops">-</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="label">Estimated Range:</span>
+                                <span class="value" id="estimated-range">-</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="charging-stations">
+                        <div class="stations-header">
+                            <h3>Charging Stations Along Route</h3>
+                            <div class="station-actions">
+                                <button id="filterStations" class="btn-secondary">Filter</button>
+                                <a href="owner-registration.html" class="btn-secondary">Register as Owner</a>
+                            </div>
+                        </div>
+                        <div id="stations-list" class="stations-list"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="auth.js"></script>
+    <script src="api.js"></script>
+    <script src="utils.js"></script>
+    <script src="animations.js"></script>
+    <script src="dashboard.js"></script>
+</body>
+</html>
+

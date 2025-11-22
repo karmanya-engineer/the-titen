@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EV Smart Route & Charging Assistant</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="responsive.css">
+    <link rel="stylesheet" href="animations.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="header-content">
+                <h1>⚡ EV Smart Route & Charging Assistant</h1>
+                <p class="subtitle">Find verified charging stations along your route</p>
+                <div class="header-actions">
+                    <a href="login.html" class="btn-primary">Login</a>
+                    <a href="signup.html" class="btn-secondary">Sign Up</a>
+                </div>
+            </div>
+        </header>
+
+        <main>
+            <div class="route-section">
+                <h2>Plan Your Route</h2>
+                <div class="route-inputs">
+                    <div class="input-group">
+                        <label for="origin">Starting Point</label>
+                        <input type="text" id="origin" placeholder="Enter starting location">
+                    </div>
+                    <div class="input-group">
+                        <label for="destination">Destination</label>
+                        <input type="text" id="destination" placeholder="Enter destination">
+                    </div>
+                    <div class="input-group">
+                        <label for="ev-range">EV Range (miles)</label>
+                        <input type="number" id="ev-range" placeholder="e.g., 250" value="250" min="50" max="500">
+                    </div>
+                    <button id="plan-route" class="btn-primary">Plan Route</button>
+                </div>
+            </div>
+
+            <div class="results-section" id="results-section" style="display: none;">
+                <div class="route-info">
+                    <h3>Route Information</h3>
+                    <div class="route-details">
+                        <div class="detail-item">
+                            <span class="label">Total Distance:</span>
+                            <span class="value" id="total-distance">-</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="label">Estimated Time:</span>
+                            <span class="value" id="estimated-time">-</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="label">Charging Stops:</span>
+                            <span class="value" id="charging-stops">-</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="charging-stations">
+                    <div class="stations-header">
+                        <h3>Charging Stations Along Route</h3>
+                        <button id="add-station" class="btn-secondary">+ Add Station</button>
+                    </div>
+                    <div id="stations-list" class="stations-list"></div>
+                </div>
+            </div>
+
+            <div class="add-station-modal" id="add-station-modal" style="display: none;">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h3>Add/Verify Charging Station</h3>
+                        <button class="close-modal" id="close-modal">&times;</button>
+                    </div>
+                    <form id="station-form">
+                        <div class="form-group">
+                            <label for="station-name">Station Name</label>
+                            <input type="text" id="station-name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="station-address">Address</label>
+                            <input type="text" id="station-address" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="station-type">Charger Type</label>
+                            <select id="station-type" required>
+                                <option value="">Select charger type</option>
+                                <option value="Level 1">Level 1 (120V)</option>
+                                <option value="Level 2">Level 2 (240V)</option>
+                                <option value="DC Fast">DC Fast Charging</option>
+                                <option value="Tesla Supercharger">Tesla Supercharger</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="connector-type">Connector Type</label>
+                            <select id="connector-type" required>
+                                <option value="">Select connector</option>
+                                <option value="CCS">CCS</option>
+                                <option value="CHAdeMO">CHAdeMO</option>
+                                <option value="Type 2">Type 2</option>
+                                <option value="Tesla">Tesla</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="power-kw">Power (kW)</label>
+                            <input type="number" id="power-kw" placeholder="e.g., 50" min="3" max="350">
+                        </div>
+                        <div class="form-group">
+                            <label for="availability">Availability</label>
+                            <select id="availability" required>
+                                <option value="24/7">24/7</option>
+                                <option value="Business Hours">Business Hours</option>
+                                <option value="Limited">Limited Hours</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="cost">Cost per kWh</label>
+                            <input type="number" id="cost" placeholder="e.g., 0.35" step="0.01" min="0">
+                        </div>
+                        <div class="form-group">
+                            <label for="amenities">Amenities (comma-separated)</label>
+                            <input type="text" id="amenities" placeholder="e.g., Restroom, Coffee, WiFi">
+                        </div>
+                        <div class="form-group">
+                            <label>
+                                <input type="checkbox" id="owner-verified">
+                                I verify this station as an owner/regular user
+                            </label>
+                        </div>
+                        <div class="form-actions">
+                            <button type="submit" class="btn-primary">Add Station</button>
+                            <button type="button" class="btn-secondary" id="cancel-add">Cancel</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </main>
+
+        <footer>
+            <p>&copy; 2024 EV Smart Route & Charging Assistant. Helping you charge smarter.</p>
+        </footer>
+    </div>
+
+    <script src="config.js"></script>
+    <script src="auth.js"></script>
+    <script src="api.js"></script>
+    <script src="utils.js"></script>
+    <script src="animations.js"></script>
+    <script>
+        // Redirect to dashboard if logged in
+        document.addEventListener('DOMContentLoaded', () => {
+            if (authManager.isAuthenticated()) {
+                const session = authManager.getSession();
+                if (session.role === 'admin') {
+                    window.location.href = 'admin.html';
+                } else {
+                    window.location.href = 'dashboard.html';
+                }
+            }
+        });
+    </script>
+</body>
+</html>
+

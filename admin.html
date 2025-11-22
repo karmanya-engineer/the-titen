@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel - EV Smart Route & Charging Assistant</title>
+    <link rel="stylesheet" href="admin.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Admin Login (if not authenticated) -->
+    <div id="adminLogin" class="admin-login-container">
+        <div class="admin-login-card">
+            <div class="admin-login-header">
+                <h1>🔐 Admin Login</h1>
+                <p>OTP-protected admin access</p>
+            </div>
+
+            <form id="adminLoginForm" class="admin-login-form">
+                <div class="form-group">
+                    <label for="adminEmail">Admin Email</label>
+                    <input type="email" id="adminEmail" name="adminEmail" placeholder="admin@evroute.com" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="adminPassword">Password</label>
+                    <input type="password" id="adminPassword" name="adminPassword" placeholder="Enter password" required>
+                </div>
+
+                <button type="submit" class="btn-primary" id="adminLoginBtn">
+                    <span class="btn-text">Request OTP</span>
+                    <span class="btn-loader" style="display: none;">⏳</span>
+                </button>
+            </form>
+
+            <!-- OTP Verification -->
+            <div id="otpVerification" class="otp-verification" style="display: none;">
+                <h3>Enter OTP</h3>
+                <p>We've sent a verification code to your email</p>
+                <form id="adminOtpForm" class="otp-form">
+                    <div class="otp-inputs">
+                        <input type="text" class="otp-input" maxlength="1" pattern="[0-9]" required>
+                        <input type="text" class="otp-input" maxlength="1" pattern="[0-9]" required>
+                        <input type="text" class="otp-input" maxlength="1" pattern="[0-9]" required>
+                        <input type="text" class="otp-input" maxlength="1" pattern="[0-9]" required>
+                        <input type="text" class="otp-input" maxlength="1" pattern="[0-9]" required>
+                        <input type="text" class="otp-input" maxlength="1" pattern="[0-9]" required>
+                    </div>
+                    <button type="submit" class="btn-primary">Verify & Login</button>
+                    <button type="button" class="btn-link" id="resendAdminOtp">Resend OTP</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Admin Dashboard (if authenticated) -->
+    <div id="adminDashboard" class="admin-dashboard" style="display: none;">
+        <nav class="admin-nav">
+            <div class="admin-nav-container">
+                <div class="admin-nav-brand">
+                    <h1>⚡ Admin Panel</h1>
+                </div>
+                <div class="admin-nav-menu">
+                    <button class="nav-tab active" data-tab="dashboard">Dashboard</button>
+                    <button class="nav-tab" data-tab="stations">Stations</button>
+                    <button class="nav-tab" data-tab="owners">Owners</button>
+                    <button class="nav-tab" data-tab="reports">Reports</button>
+                    <button class="nav-tab" data-tab="logs">Logs</button>
+                    <button class="btn-logout" id="adminLogoutBtn">Logout</button>
+                </div>
+            </div>
+        </nav>
+
+        <main class="admin-main">
+            <!-- Dashboard Tab -->
+            <div id="tab-dashboard" class="admin-tab active">
+                <div class="admin-header">
+                    <h2>Dashboard Overview</h2>
+                </div>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon">📊</div>
+                        <div class="stat-info">
+                            <div class="stat-value" id="totalStations">0</div>
+                            <div class="stat-label">Total Stations</div>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">⏳</div>
+                        <div class="stat-info">
+                            <div class="stat-value" id="pendingStations">0</div>
+                            <div class="stat-label">Pending Approvals</div>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">👥</div>
+                        <div class="stat-info">
+                            <div class="stat-value" id="totalOwners">0</div>
+                            <div class="stat-label">Registered Owners</div>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">✅</div>
+                        <div class="stat-info">
+                            <div class="stat-value" id="verifiedStations">0</div>
+                            <div class="stat-label">Verified Stations</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Stations Tab -->
+            <div id="tab-stations" class="admin-tab">
+                <div class="admin-header">
+                    <h2>Station Management</h2>
+                    <div class="filter-tabs">
+                        <button class="filter-tab active" data-filter="all">All</button>
+                        <button class="filter-tab" data-filter="pending">Pending</button>
+                        <button class="filter-tab" data-filter="approved">Approved</button>
+                        <button class="filter-tab" data-filter="rejected">Rejected</button>
+                    </div>
+                </div>
+                <div id="stationsList" class="admin-list"></div>
+            </div>
+
+            <!-- Owners Tab -->
+            <div id="tab-owners" class="admin-tab">
+                <div class="admin-header">
+                    <h2>Owner Management</h2>
+                </div>
+                <div id="ownersList" class="admin-list"></div>
+            </div>
+
+            <!-- Reports Tab -->
+            <div id="tab-reports" class="admin-tab">
+                <div class="admin-header">
+                    <h2>System Reports</h2>
+                </div>
+                <div class="reports-container">
+                    <div class="report-card">
+                        <h3>Registration Activity</h3>
+                        <div id="registrationReport" class="report-content"></div>
+                    </div>
+                    <div class="report-card">
+                        <h3>Station Statistics</h3>
+                        <div id="stationReport" class="report-content"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Logs Tab -->
+            <div id="tab-logs" class="admin-tab">
+                <div class="admin-header">
+                    <h2>System Logs</h2>
+                    <button class="btn-secondary" id="clearLogsBtn">Clear Logs</button>
+                </div>
+                <div id="logsList" class="logs-container"></div>
+            </div>
+        </main>
+    </div>
+
+    <script src="auth.js"></script>
+    <script src="utils.js"></script>
+    <script src="admin.js"></script>
+</body>
+</html>
+
+
